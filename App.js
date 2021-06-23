@@ -1,44 +1,58 @@
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, Text, View, SafeAreaView, StatusBar } from "react-native";
-import { Searchbar } from "react-native-paper";
-import { RestaurantsScreen } from "./src/features/restaurants/screens/restaurants.screen";
-
+import { Text } from "react-native";
 import { ThemeProvider } from "styled-components/native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { theme } from "./src/infrastructure/theme";
 import {
   useFonts as useOswald,
   Oswald_400Regular,
 } from "@expo-google-fonts/oswald";
 import { useFonts as useLato, Lato_400Regular } from "@expo-google-fonts/lato";
 
+import { theme } from "./src/infrastructure/theme";
+import { RestaurantsScreen } from "./src/features/restaurants/screens/restaurants.screen";
+import { SafeArea } from "./src/components/utility/safe-area.component";
+
+const Tab = createBottomTabNavigator();
+
+const Settings = () => (
+  <SafeArea>
+    <Text>Settings</Text>
+  </SafeArea>
+);
+const Map = () => (
+  <SafeArea>
+    <Text>Map</Text>
+  </SafeArea>
+);
+
 export default function App() {
-  let [OswaldLoaded] = useOswald({
+  const [oswaldLoaded] = useOswald({
     Oswald_400Regular,
   });
-  let [LatoLoaded] = useLato({
+
+  const [latoLoaded] = useLato({
     Lato_400Regular,
   });
 
-  if (!OswaldLoaded || !LatoLoaded) {
+  if (!oswaldLoaded || !latoLoaded) {
     return null;
   }
+
   return (
     <>
       <ThemeProvider theme={theme}>
-        <RestaurantsScreen />
+        <NavigationContainer>
+          <Tab.Navigator>
+            <Tab.Screen name="Restaurants" component={RestaurantsScreen} />
+            <Tab.Screen name="Map" component={Map} />
+            <Tab.Screen name="Settings" component={Settings} />
+          </Tab.Navigator>
+        </NavigationContainer>
       </ThemeProvider>
       <ExpoStatusBar style="auto" />
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
