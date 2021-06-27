@@ -27,10 +27,11 @@ export const RestaurantsContextProvider = ({ children }) => {
         });
     }, 2000);
   };
+
   useEffect(() => {
     retrieveRestaurants();
   }, []);
-
+  console.log(restaurants);
   return (
     <RestaurantsContext.Provider
       value={{
